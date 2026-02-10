@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Create Product</title>
+    <title>Edit Product</title>
     <meta charset="UTF-8">
 </head>
 <body>
 
-<h2>Create Product</h2>
+<h2>Edit Product</h2>
 
-<form action="/product/create" method="post" th:object="${product}">
+<form action="/product/edit" method="post" th:object="${product}">
 
-    <!-- ❌ NO ID FIELD -->
+    <!-- hidden id -->
+    <input type="hidden" th:field="*{productId}">
 
     <label>Name:</label><br>
     <input type="text" th:field="*{productName}" required><br><br>
@@ -18,7 +19,7 @@
     <label>Quantity:</label><br>
     <input type="number" th:field="*{productQuantity}" required><br><br>
 
-    <button type="submit">Save</button>
+    <button type="submit">Update</button>
 </form>
 
 <br>
