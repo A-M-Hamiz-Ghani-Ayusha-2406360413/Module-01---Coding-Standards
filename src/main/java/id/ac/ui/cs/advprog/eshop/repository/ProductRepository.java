@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository
 public class ProductRepository {
-    private List<Product> productData = new ArrayList<>();
+
+    private final List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
         productData.add(product);
@@ -39,10 +40,7 @@ public class ProductRepository {
         return null;
     }
 
-    public void delete(String id) {
-        productData.removeIf(p -> p.getProductId().equals(id));
+    public boolean delete(String id) {
+        return productData.removeIf(p -> p.getProductId().equals(id));
     }
-
-
-
 }
