@@ -1,3 +1,6 @@
+import org.gradle.api.plugins.quality.Pmd
+import org.gradle.api.plugins.quality.PmdExtension
+
 plugins {
     java
     jacoco
@@ -79,7 +82,7 @@ tasks.jacocoTestReport {
     )
 }
 
-pmd {
+configure<PmdExtension> {
     isConsoleOutput = true
     toolVersion = "7.0.0-rc4"
     rulesMinimumPriority.set(5)
