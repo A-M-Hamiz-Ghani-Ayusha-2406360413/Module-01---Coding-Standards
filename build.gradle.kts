@@ -40,25 +40,27 @@ dependencies {
     testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+
+tasks.test {
+    filter { 
+        excludeTestsMatching("*FunctionalTest") 
+    }
+    finalizedBy(tasks.jacocoTestReport)
+}
+
 tasks.register<Test>("unitTest") {
     description = "Runs unit tests."
     group = "verification"
     filter { excludeTestsMatching("*FunctionalTest") }
-    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.register<Test>("functionalTest") {
     description = "Runs functional tests."
     group = "verification"
     filter { includeTestsMatching("*FunctionalTest") }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-}
-
-tasks.test {
-    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport {
