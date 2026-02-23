@@ -1,9 +1,8 @@
 plugins {
     java
     jacoco
-    pmd
     id("org.springframework.boot") version "4.0.2"
-    id("io.spring.dependency-management") version "1.1.7"
+    id("io.spring.dependency-management") version "1.1.4"
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -94,4 +93,15 @@ tasks.withType<Pmd>().configureEach {
         xml.required.set(false)
         html.required.set(true)
     }
+}
+
+tasks.test {
+    filter {
+        excludeTestsMatching("*FunctionalTest")
+    }
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
 }
