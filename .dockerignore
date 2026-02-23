@@ -1,0 +1,31 @@
+# Build outputs
+build/
+.gradle/
+bin/
+out/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Test reports
+*.log
+
+# Documentation
+README.md
+*.txt
+
+# Gradle wrapper JAR (we copy it separately)
+!gradle/wrapper/gradle-wrapper.jar

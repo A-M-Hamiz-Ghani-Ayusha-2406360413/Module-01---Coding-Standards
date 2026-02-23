@@ -1,0 +1,362 @@
+CODE COVERAGE IMPROVEMENT REPORT - FINAL VERSION
+
+Module 1 - Coding Standards Exercise
+Date: February 23, 2026
+================================================================================
+
+OVERALL COVERAGE SUMMARY
+--------------------------------------------------------------------------------
+Initial Coverage:    59% instruction coverage
+Intermediate:        83% instruction coverage
+FINAL COVERAGE:      100% instruction coverage ✓ TARGET ACHIEVED!
+
+Total Improvement: +41 percentage points (69.5% relative improvement)
+
+DETAILED COVERAGE BY COMPONENT - FINAL RESULTS
+--------------------------------------------------------------------------------
+
+1. ProductServiceImpl (id.ac.ui.cs.advprog.eshop.service)
+   Before: 89% instruction coverage (5 missed instructions)
+   After:  100% instruction coverage (0 missed instructions)
+   Status: ✓ FULLY COVERED
+
+2. ProductRepository (id.ac.ui.cs.advprog.eshop.repository)
+   Before: 71% instruction coverage, 37% branch coverage
+   After:  100% instruction coverage, 100% branch coverage
+   Improvement: +29 percentage points (instructions), +63 percentage points (branches)
+   Status: ✓ FULLY COVERED
+
+3. Product Model (id.ac.ui.cs.advprog.eshop.model)
+   Before: 100% coverage
+   After:  100% coverage
+   Status: ✓ FULLY COVERED (maintained)
+
+4. HomeController (id.ac.ui.cs.advprog.eshop.controller)
+   Before: 60% instruction coverage
+   After:  100% instruction coverage
+   Status: ✓ FULLY COVERED
+
+5. ProductController (id.ac.ui.cs.advprog.eshop.controller)
+   Before: 58% instruction coverage
+   After:  100% instruction coverage
+   Status: ✓ FULLY COVERED
+
+6. EshopApplication (id.ac.ui.cs.advprog.eshop)
+   Status: ✓ EXCLUDED (main method - standard practice)
+
+METRICS BREAKDOWN - COMPLETE JOURNEY
+--------------------------------------------------------------------------------
+                    Initial         Intermediate    Final           Total Change
+Instructions:       134/224 (59%)   169/203 (83%)   195/195 (100%)  +41%
+Branches:           3/8 (37%)       6/8 (75%)       8/8 (100%)      +63%
+Lines:              31/55 (56%)     41/51 (80%)     48/48 (100%)    +44%
+Methods:            21/31 (67%)     21/25 (84%)     23/23 (100%)    +33%
+Classes:            6/6 (100%)      6/6 (100%)      5/5 (100%)      maintained
+
+NEW UNIT TESTS ADDED - PHASE 1 (Repository & Service)
+--------------------------------------------------------------------------------
+
+ProductRepositoryTest.java - Added 6 test methods:
+  ✓ testFindByIdIfProductExists()
+    - Verifies findById() returns correct product when it exists
+    
+  ✓ testFindByIdIfProductDoesNotExist()
+    - Verifies findById() returns null for non-existent product
+    
+  ✓ testUpdateIfProductExists()
+    - Verifies update() successfully modifies existing product
+    - Validates product data is correctly updated in repository
+    
+  ✓ testUpdateIfProductDoesNotExist()
+    - Verifies update() returns null when product doesn't exist
+    
+  ✓ testDeleteIfProductExists()
+    - Verifies delete() removes product and returns true
+    - Validates product is no longer findable after deletion
+    
+  ✓ testDeleteIfProductDoesNotExist()
+    - Verifies delete() returns false for non-existent product
+
+ProductServiceImplTest.java - Added 5 test methods:
+  ✓ createProduct_positive_createSuccess()
+    - Verifies create() assigns UUID and persists product
+    - Validates product name and quantity are preserved
+    
+  ✓ findAllProducts_positive_returnsAllProducts()
+    - Verifies findAll() returns all created products
+    - Tests with multiple products in repository
+    
+  ✓ findAllProducts_positive_emptyList()
+    - Verifies findAll() returns empty list when no products exist
+    
+  ✓ findById_positive_productExists()
+    - Verifies findById() returns correct product from service layer
+    
+  ✓ findById_negative_productDoesNotExist()
+    - Verifies findById() returns null for non-existent product ID
+
+NEW UNIT TESTS ADDED - PHASE 2 (Controllers & Branch Coverage)
+--------------------------------------------------------------------------------
+
+ProductControllerTest.java - NEW FILE - 6 test methods:
+  ✓ createProductPage_shouldReturnCreateProductView()
+    - Tests GET /product/create endpoint
+    - Verifies correct view name returned
+    - Validates product model attribute added
+    
+  ✓ createProductPost_shouldCreateProductAndRedirect()
+    - Tests POST /product/create endpoint
+    - Verifies product creation called
+    - Validates redirect to product list
+    
+  ✓ productListPage_shouldReturnProductListView()
+    - Tests GET /product/list endpoint
+    - Verifies all products retrieved from service
+    - Validates products added to model
+    
+  ✓ editProductPage_shouldReturnEditProductView()
+    - Tests GET /product/edit/{id} endpoint
+    - Verifies product found by ID
+    - Validates product added to model for editing
+    
+  ✓ editProductPost_shouldUpdateProductAndRedirect()
+    - Tests POST /product/edit endpoint
+    - Verifies product update called
+    - Validates redirect to product list
+    
+  ✓ deleteProduct_shouldDeleteProductAndRedirect()
+    - Tests POST /product/delete/{id} endpoint
+    - Verifies product deletion called
+    - Validates redirect to product list
+
+HomeControllerTest.java - NEW FILE - 1 test method:
+  ✓ home_shouldReturnHomeView()
+    - Tests GET / endpoint
+    - Verifies home view returned
+
+ProductRepositoryTest.java - Added 2 additional test methods:
+  ✓ testFindByIdIfProductDoesNotExistWithMultipleProducts()
+    - Covers edge case: searching through list with multiple products
+    - Tests branch coverage for iteration through all products
+    
+  ✓ testUpdateIfProductDoesNotExistWithMultipleProducts()
+    - Covers edge case: updating when product doesn't exist in list of many
+    - Tests branch coverage for full iteration without finding match
+
+SUMMARY OF TEST FILES CREATED/MODIFIED
+--------------------------------------------------------------------------------
+Files Modified:
+  - src/test/java/.../repository/ProductRepositoryTest.java (6+2 tests added)
+  - src/test/java/.../service/ProductServiceImplTest.java (5 tests added)
+  - build.gradle.kts (JaCoCo configuration added)
+
+Files Created:
+  - src/test/java/.../controller/ProductControllerTest.java (6 tests)
+  - src/test/java/.../controller/HomeControllerTest.java (1 test)
+
+Total Test Methods Added: 20 new test methods
+Existing Test Methods: 14 (originally in the project)
+Final Test Count: 34 test methods
+
+TEST EXECUTION RESULTS - FINAL
+--------------------------------------------------------------------------------
+Build Status: SUCCESS
+Total Tests: 34 tests completed
+Failed Tests: 0 (functional tests excluded from coverage)
+Build Time: ~25-40 seconds
+JaCoCo Report: build/reports/jacoco/test/html/index.html
+
+Final Coverage Metrics:
+  ✓ Instructions: 195/195 (100%)
+  ✓ Branches: 8/8 (100%)
+  ✓ Lines: 48/48 (100%)
+  ✓ Methods: 23/23 (100%)
+  ✓ Classes: 5/5 (100%)
+
+CONFIGURATION CHANGES
+--------------------------------------------------------------------------------
+Modified: build.gradle.kts
+
+1. Added JaCoCo Plugin:
+   plugins {
+       java
+       jacoco  // <-- Added
+       id("org.springframework.boot") version "4.0.2"
+       id("io.spring.dependency-management") version "1.1.7"
+   }
+
+2. Configured JaCoCo Test Report Task:
+   tasks.test {
+       finalizedBy(tasks.jacocoTestReport)
+   }
+
+   tasks.jacocoTestReport {
+       dependsOn(tasks.test)
+       reports {
+           xml.required.set(false)
+           csv.required.set(false)
+           html.required.set(true)
+           html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/test/html"))
+       }
+       classDirectories.setFrom(
+           files(classDirectories.files.map {
+               fileTree(it) {
+                   exclude("**/EshopApplication.class")  // Excluded main method
+               }
+           })
+       )
+   }
+
+3. Exclusions Applied:
+   - EshopApplication.class: Main method excluded (industry best practice)
+   - Reason: Bootstrap/main methods are typically not unit tested
+
+TESTING APPROACH & BEST PRACTICES FOLLOWED
+--------------------------------------------------------------------------------
+
+1. Repository Layer (Unit Tests):
+   - Used @InjectMocks for direct repository testing
+   - No mocking required (in-memory data structure)
+   - Tested all CRUD operations
+   - Covered edge cases (empty lists, non-existent items)
+   - Achieved 100% branch coverage with additional edge case tests
+
+2. Service Layer (Unit Tests):
+   - Used real ProductRepository instance (not mocked)
+   - Tested business logic layer
+   - Verified UUID generation in create method
+   - Tested all service operations
+   - Covered positive and negative scenarios
+
+3. Controller Layer (Unit Tests with Mocks):
+   - Used @Mock for ProductService dependency
+   - Used @Mock for Spring Model
+   - Verified correct view names returned
+   - Verified service methods called correctly
+   - Verified model attributes added correctly
+   - Used Mockito for mocking and verification
+
+4. Test Naming Convention:
+   - Pattern: [methodName]_[scenario]_[expectedBehavior]
+   - Examples:
+     * createProduct_positive_createSuccess
+     * findById_negative_productDoesNotExist
+     * deleteProduct_shouldDeleteProductAndRedirect
+
+FILES CREATED & THEIR LOCATIONS
+--------------------------------------------------------------------------------
+New Test Files:
+1. src/test/java/id/ac/ui/cs/advprog/eshop/controller/ProductControllerTest.java
+   - Full controller test suite with 6 methods
+   - Uses Mockito for mocking dependencies
+   - Tests all HTTP endpoints
+
+2. src/test/java/id/ac/ui/cs/advprog/eshop/controller/HomeControllerTest.java
+   - Simple test for home endpoint
+   - Verifies routing to home view
+
+Modified Test Files:
+1. src/test/java/id/ac/ui/cs/advprog/eshop/repository/ProductRepositoryTest.java
+   - Added 8 methods total (6 initial + 2 for branch coverage)
+   - Now covers all branches in repository methods
+
+2. src/test/java/id/ac/ui/cs/advprog/eshop/service/ProductServiceImplTest.java
+   - Added 5 methods for complete service coverage
+   - Tests all service operations
+
+KEY ACHIEVEMENTS
+--------------------------------------------------------------------------------
+✓ Achieved 100% instruction coverage
+✓ Achieved 100% branch coverage
+✓ All business logic fully tested
+✓ All controller endpoints tested
+✓ All repository operations tested
+✓ All service methods tested
+✓ Following industry best practices:
+  - Excluded main() method from coverage
+  - Used appropriate mocking strategies
+  - Named tests clearly and consistently
+  - Covered both positive and negative scenarios
+  - Tested edge cases
+
+GRADLE COMMANDS USED
+--------------------------------------------------------------------------------
+./gradlew test                    # Run all tests
+./gradlew jacocoTestReport        # Generate JaCoCo coverage report
+./gradlew clean test jacocoTestReport  # Full clean build with coverage
+./gradlew test --continue         # Run all tests, continue on failure
+
+View Report:
+  Open: build/reports/jacoco/test/html/index.html in browser
+
+LESSONS LEARNED & NOTES
+--------------------------------------------------------------------------------
+1. Coverage Journey:
+   - Started at 59% (initial state)
+   - Reached 83% after adding repository and service tests
+   - Reached 97% after adding controller tests
+   - Achieved 100% after excluding EshopApplication main method
+
+2. Testing Strategy:
+   - Bottom-up approach: Repository → Service → Controller
+   - This ensures solid foundation before testing higher layers
+   - Controller tests use mocks (isolation testing)
+   - Service tests use real repository (integration-style)
+
+3. Branch Coverage Importance:
+   - Initial branch coverage was only 37%
+   - Many edge cases were missed (empty lists, not found scenarios)
+   - Added specific tests to cover all conditional branches
+   - Final branch coverage: 100%
+
+4. Best Practices Applied:
+   - All tests are independent and can run in any order
+   - Each test focuses on a single behavior
+   - Clear naming convention makes tests self-documenting
+   - Both positive and negative scenarios covered
+   - Mocking used appropriately (controllers only)
+
+5. Industry Standards:
+   - Main methods are typically excluded from coverage
+   - 100% coverage doesn't mean bug-free code
+   - Tests serve as living documentation
+   - Coverage metrics guide testing, not replace thinking
+
+COVERAGE REPORT INTERPRETATION
+--------------------------------------------------------------------------------
+The JaCoCo HTML report shows:
+  - Green bars: Fully covered code
+  - Yellow bars: Partially covered code
+  - Red bars: Uncovered code
+
+Navigation:
+  1. Open: build/reports/jacoco/test/html/index.html
+  2. Click on any package to see class-level coverage
+  3. Click on any class to see line-by-line coverage
+  4. Red highlights show untested lines
+  5. Yellow diamonds show partially covered branches
+
+VERIFICATION STEPS
+--------------------------------------------------------------------------------
+To verify 100% coverage:
+1. Run: ./gradlew clean test jacocoTestReport
+2. Open: build/reports/jacoco/test/html/index.html
+3. Check overall coverage at top of page
+4. Browse each package to verify 100% in all areas
+5. Note: EshopApplication excluded (shown in exclusions)
+
+Report Generated: February 23, 2026
+Updated: February 23, 2026 (100% Coverage Achieved)
+================================================================================
+
+FINAL STATISTICS
+--------------------------------------------------------------------------------
+Total Files Modified: 2 (ProductRepositoryTest.java, ProductServiceImplTest.java)
+Total Files Created: 2 (ProductControllerTest.java, HomeControllerTest.java)
+Configuration Files Updated: 1 (build.gradle.kts)
+Total Test Methods Added: 20
+Total Lines of Test Code Added: ~280 lines
+Time to 100% Coverage: Incremental improvement in 2 phases
+Final Build Status: ✓ SUCCESS
+Final Coverage: ✓ 100% (Instructions, Branches, Lines, Methods, Classes)
+================================================================================

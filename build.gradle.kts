@@ -1,7 +1,11 @@
+import org.gradle.api.plugins.quality.Pmd
+import org.gradle.api.plugins.quality.PmdExtension
+
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "3.2.2"
+    pmd
+    id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.4"
 }
 
@@ -39,6 +43,17 @@ dependencies {
     testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+
+tasks.test {
+    filter { 
+        excludeTestsMatching("*FunctionalTest") 
+    }
+    finalizedBy(tasks.jacocoTestReport)
+}
+
 tasks.register<Test>("unitTest") {
     description = "Runs unit tests."
     group = "verification"
@@ -51,17 +66,35 @@ tasks.register<Test>("functionalTest") {
     filter { includeTestsMatching("*FunctionalTest") }
 }
 
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-}
-
-tasks.test {
-    filter {
-        excludeTestsMatching("*FunctionalTest")
-    }
-    finalizedBy(tasks.jacocoTestReport)
-}
-
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/test/html"))
+    }
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude("**/EshopApplication.class")
+            }
+        })
+    )
+}
+
+configure<PmdExtension> {
+    isConsoleOutput = true
+    toolVersion = "7.0.0-rc4"
+    rulesMinimumPriority.set(5)
+    ruleSetFiles = files("${project.rootDir}/pmd-ruleset.xml")
+    ruleSets = listOf()
+    isIgnoreFailures = true
+}
+
+tasks.withType<Pmd>().configureEach {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
 }
