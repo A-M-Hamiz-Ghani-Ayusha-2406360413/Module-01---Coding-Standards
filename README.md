@@ -34,7 +34,7 @@ Secara keseluruhan, kombinasi unit test dan functional test meningkatkan keperca
 
 ## 📊 Code Coverage Achievement
 
-Pada modul ini, kami berhasil mencapai **100% code coverage** untuk semua komponen aplikasi:
+Pada modul ini, saya berhasil mencapai **100% code coverage** untuk semua komponen aplikasi dalam rangka implementasi BONUS
 
 | Metric | Coverage |
 |--------|----------|
@@ -43,40 +43,6 @@ Pada modul ini, kami berhasil mencapai **100% code coverage** untuk semua kompon
 | **Lines** | 48/48 (100%) |
 | **Methods** | 23/23 (100%) |
 | **Classes** | 5/5 (100%) |
-
-### Strategi Mencapai 100% Code Coverage
-
-Untuk mencapai 100% code coverage, kami menerapkan strategi pengujian yang komprehensif:
-
-1. **Unit Testing untuk Controller dengan Mock Objects**
-   - Menggunakan `@WebMvcTest` untuk menguji controller secara terisolasi
-   - Mengimplementasikan mock untuk `ProductService` menggunakan `@MockBean`
-   - Menguji semua endpoint HTTP (GET, POST) dan memverifikasi response, model attributes, dan view names
-   - Contoh: Testing `createProductPage()`, `createProductPost()`, `editProductPage()`, dan `editProductPost()`
-
-2. **Comprehensive Service Layer Testing**
-   - Menguji semua method pada `ProductServiceImpl` dengan berbagai skenario
-   - Menggunakan mock `ProductRepository` untuk memastikan pengujian fokus pada business logic
-   - Mencakup test case untuk operasi CRUD: create, findAll, findById, update, dan delete
-   - Menguji edge cases seperti update/delete produk yang tidak ditemukan
-
-3. **Repository Layer Testing**
-   - Menguji implementasi in-memory repository
-   - Memverifikasi operasi CRUD pada data structure internal
-   - Menguji behavior unik repository seperti ID generation dan data persistence
-
-4. **Model Testing**
-   - Menguji getter dan setter pada model `Product`
-   - Memverifikasi data integrity dan encapsulation
-
-### Keuntungan Testing dengan Mock Objects
-
-Penggunaan mock objects pada controller testing memberikan beberapa keuntungan:
-
-- **Isolasi:** Controller dapat diuji tanpa perlu menjalankan service atau repository sebenarnya
-- **Kecepatan:** Test berjalan lebih cepat karena tidak ada database atau business logic yang sebenarnya
-- **Kontrol:** Dapat mengontrol hasil dari dependencies untuk menguji berbagai skenario
-- **Fokus:** Testing fokus pada tanggung jawab controller (request handling, view rendering, model preparation)
 
 ## 📝 Reflection Questions
 
@@ -124,7 +90,7 @@ Selama mengerjakan exercise Module 2, beberapa code quality issue yang ditemukan
 
 #### Continuous Integration (CI)
 
-Implementasi kami memenuhi prinsip CI karena:
+Implementasi saya memenuhi prinsip CI karena:
 
 1. **Automated Testing:** Setiap push ke repository secara otomatis men-trigger workflow CI yang menjalankan test suite lengkap. Workflow `ci.yml` menjalankan unit tests dan menghasilkan code coverage report menggunakan JaCoCo. Ini memastikan setiap perubahan kode diverifikasi secara otomatis sebelum di-merge.
 
@@ -136,7 +102,7 @@ Implementasi kami memenuhi prinsip CI karena:
 
 #### Continuous Deployment (CD)
 
-Implementasi kami memenuhi prinsip CD karena:
+Implementasi saya memenuhi prinsip CD karena:
 
 1. **Automated Deployment:** Menggunakan Render dengan pull-based deployment approach yang otomatis. File `render.yaml` dikonfigurasi dengan `autoDeploy: true` dan branch `master`, sehingga setiap push ke master branch secara otomatis men-trigger deployment process tanpa intervensi manual.
 
@@ -150,7 +116,7 @@ Implementasi kami memenuhi prinsip CD karena:
 
 #### Kesimpulan
 
-Implementasi CI/CD kami sudah memenuhi best practices modern software development. Pipeline CI memastikan code quality dan correctness melalui automated tests dan static analysis. Pipeline CD memastikan aplikasi yang sudah lolos verification langsung ter-deploy ke production secara otomatis. Kombinasi GitHub Actions untuk CI dan Render untuk CD menciptakan end-to-end automation dari commit hingga production, mempercepat delivery cycle dan mengurangi human error.
+Implementasi CI/CD saya sudah memenuhi best practices modern software development. Pipeline CI memastikan code quality dan correctness melalui automated tests dan static analysis. Pipeline CD memastikan aplikasi yang sudah lolos verification langsung ter-deploy ke production secara otomatis. Kombinasi GitHub Actions untuk CI dan Render untuk CD menciptakan end-to-end automation dari commit hingga production, mempercepat delivery cycle dan mengurangi human error.
 
 Yang membuat implementasi ini particularly effective adalah penggunaan multiple layers of checks (tests + code quality) di CI phase, dan reliable deployment platform (Render) yang handle infrastructure concerns di CD phase. Developer dapat fokus pada feature development dengan confidence bahwa code changes akan diverifikasi dan di-deploy secara konsisten dan reliable.
 
