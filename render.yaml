@@ -1,0 +1,26 @@
+# Render Blueprint for deploying Spring Boot application
+# This file enables pull-based deployment on Render
+# See: https://docs.render.com/blueprint-spec
+
+services:
+  - type: web
+    name: eshop-app
+    runtime: docker
+    region: oregon # Change to your preferred region
+    plan: free # Use 'free' tier or upgrade as needed
+    branch: main # Deploy from main branch
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    
+    # Health check endpoint
+    healthCheckPath: /
+    
+    # Environment variables
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SERVER_PORT
+        value: 8080
+    
+    # Auto-deploy on git push (pull-based approach)
+    autoDeploy: true

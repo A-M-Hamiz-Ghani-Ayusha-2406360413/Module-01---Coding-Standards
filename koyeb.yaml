@@ -1,0 +1,52 @@
+# Koyeb deployment configuration
+# This file enables deployment on Koyeb using Docker
+# See: https://www.koyeb.com/docs/deploy/java
+
+version: "1.0"
+
+app:
+  name: eshop
+  
+services:
+  - name: eshop-service
+    type: web
+    
+    # Pull-based: Deploy from GitHub
+    git:
+      branch: main
+      buildCommand: "" # Docker build is automatic
+      runCommand: "" # Docker ENTRYPOINT is used
+    
+    # Docker configuration
+    docker:
+      dockerfile: Dockerfile
+    
+    # Instance configuration
+    instance:
+      type: free # or 'nano', 'micro', etc.
+    
+    # Ports configuration
+    ports:
+      - port: 8080
+        protocol: http
+    
+    # Environment variables
+    env:
+      - name: SPRING_PROFILES_ACTIVE
+        value: production
+      - name: SERVER_PORT
+        value: "8080"
+    
+    # Health check
+    health_check:
+      http:
+        path: /
+        port: 8080
+    
+    # Scaling configuration
+    scaling:
+      min: 1
+      max: 1
+    
+    # Auto-deploy on git push
+    auto_deploy: true
