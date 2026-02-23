@@ -1,0 +1,46 @@
+name: PMD Code Scanning
+
+# Trigger on every push to every branch
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  pmd-analysis:
+    name: PMD Static Code Analysis
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Check out the Git repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Java toolchain
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          cache: "gradle"
+          
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+        
+      - name: Run PMD code analysis on main source
+        run: ./gradlew pmdMain
+        
+      - name: Run PMD code analysis on test source
+        run: ./gradlew pmdTest
+        
+      - name: Upload PMD main report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-main-report
+          path: build/reports/pmd/main.html
+          
+      - name: Upload PMD test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-test-report
+          path: build/reports/pmd/test.html

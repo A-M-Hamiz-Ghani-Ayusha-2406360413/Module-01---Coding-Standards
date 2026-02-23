@@ -1,6 +1,7 @@
 plugins {
     java
     jacoco
+    pmd
     id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -74,4 +75,20 @@ tasks.jacocoTestReport {
             }
         })
     )
+}
+
+pmd {
+    isConsoleOutput = true
+    toolVersion = "7.0.0-rc4"
+    rulesMinimumPriority.set(5)
+    ruleSetFiles = files("${project.rootDir}/pmd-ruleset.xml")
+    ruleSets = listOf()
+    isIgnoreFailures = true
+}
+
+tasks.withType<Pmd>().configureEach {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
 }
