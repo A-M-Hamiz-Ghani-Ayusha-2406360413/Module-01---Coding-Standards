@@ -86,7 +86,7 @@ class ProductControllerTest {
     void editProductPost_shouldUpdateProductAndRedirect() {
         when(productService.update(any(Product.class))).thenReturn(product);
 
-        String viewName = productController.editProductPost(product);
+        String viewName = productController.editProductPost(product, model);
 
         assertEquals("redirect:list", viewName);
         verify(productService, times(1)).update(product);
