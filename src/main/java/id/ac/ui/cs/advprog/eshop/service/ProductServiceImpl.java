@@ -50,6 +50,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.delete(id);
     }
 
-
+    @Override
+    public void deleteProductById(String productId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteProductById'");
+    }
 
 }
