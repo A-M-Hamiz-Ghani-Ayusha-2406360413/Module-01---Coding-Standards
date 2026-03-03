@@ -130,3 +130,56 @@ Yang membuat implementasi ini particularly effective adalah penggunaan multiple 
 - **[.github/workflows/ci.yml](.github/workflows/ci.yml)** - Continuous Integration workflow
 - **[.github/workflows/pmd-scanning.yml](.github/workflows/pmd-scanning.yml)** - Code quality analysis
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Comprehensive deployment guide
+
+---
+
+# MODULE 03 — SOLID Principles
+
+## Reflection
+
+### 1) Explain what principles you apply to your project!
+
+Saya menerapkan kelima prinsip SOLID pada proyek ini:
+
+#### Single Responsibility Principle (SRP)
+Sebelumnya, file `ProductController.java` memuat dua class sekaligus: `ProductController` dan `CarController`. Ini melanggar SRP karena satu file bertanggung jawab atas dua resource yang berbeda (Product dan Car). Saya memisahkan `CarController` ke dalam file tersendiri (`CarController.java`) sehingga setiap class hanya memiliki satu tanggung jawab — menangani request untuk satu jenis entity saja.
+
+#### Open/Closed Principle (OCP)
+Arsitektur proyek sudah mengikuti OCP melalui penggunaan interface (`ProductService`, `CarService`). Jika di masa depan diperlukan service baru atau perubahan perilaku, kita cukup membuat implementasi baru dari interface tersebut tanpa memodifikasi kode yang sudah ada. Contohnya, jika ingin menambahkan caching pada `ProductService`, cukup buat `CachedProductServiceImpl` yang mengimplementasikan `ProductService` tanpa mengubah `ProductServiceImpl` yang sudah ada.
+
+#### Liskov Substitution Principle (LSP)
+Sebelumnya, `CarController extends ProductController`. Ini melanggar LSP karena `CarController` tidak dapat menggantikan `ProductController` secara semantik — Car bukan subtype dari Product. Method-method yang di-inherit dari `ProductController` (seperti `createProductPost`, `productListPage`) tidak relevan dan bisa menimbulkan perilaku yang tidak diharapkan jika `CarController` digunakan sebagai `ProductController`. Saya menghapus inheritance ini sehingga `CarController` menjadi class independen.
+
+#### Interface Segregation Principle (ISP)
+Sebelumnya, `ProductService` memiliki method `deleteProductById(String productId)` yang tidak diimplementasikan (melempar `UnsupportedOperationException`). Ini melanggar ISP karena client dipaksa bergantung pada method yang tidak mereka butuhkan. Saya menghapus method tersebut dari interface karena sudah ada method `delete(String id)` yang memenuhi kebutuhan yang sama. Interface `ProductService` dan `CarService` kini hanya berisi method-method yang benar-benar digunakan oleh client-nya.
+
+#### Dependency Inversion Principle (DIP)
+Sebelumnya, `CarController` bergantung langsung pada class konkret `CarServiceImpl` (bukan interface `CarService`), dan beberapa class menggunakan field injection (`@Autowired` pada field). Saya mengubah dependency `CarController` agar bergantung pada interface `CarService`, dan mengganti field injection menjadi constructor injection di `ProductController`, `CarController`, dan `CarServiceImpl`. Dengan constructor injection, dependency dinyatakan secara eksplisit dan high-level module bergantung pada abstraksi, bukan implementasi konkret.
+
+### 2) Explain the advantages of applying SOLID principles to your project with examples.
+
+Penerapan SOLID memberikan beberapa keuntungan nyata:
+
+- **Maintainability yang lebih baik:** Dengan SRP, setiap class memiliki satu alasan untuk berubah. Misalnya, jika ada perubahan pada logika Car (menambah field `carYear`), kita hanya perlu mengubah `CarController.java`, `Car.java`, dan `CarServiceImpl.java` tanpa menyentuh file-file Product. Sebelum refactoring, perubahan pada `CarController` bisa saja secara tidak sengaja mempengaruhi `ProductController` karena keduanya berada dalam satu file dan memiliki hubungan inheritance.
+
+- **Testability yang lebih mudah:** Dengan DIP dan constructor injection, kita bisa dengan mudah meng-inject mock object saat testing. Contohnya, `ProductController` menerima `ProductService` melalui constructor, sehingga pada unit test kita bisa menyuntikkan mock `ProductService` tanpa memerlukan Spring context. Ini membuat test lebih cepat dan terisolasi.
+
+- **Extensibility tanpa risiko:** Dengan OCP, menambahkan fitur baru tidak memerlukan modifikasi kode yang sudah berjalan. Misalnya, jika ingin menambahkan entity baru seperti `Motorcycle`, kita cukup membuat `MotorcycleController`, `MotorcycleService`, `MotorcycleServiceImpl`, dan `MotorcycleRepository` tanpa mengubah kode Product atau Car yang sudah ada dan sudah teruji.
+
+- **Keamanan dari bug inheritance:** Dengan LSP, menghapus inheritance `CarController extends ProductController` mencegah bug di mana endpoint Product secara tidak sengaja bisa diakses melalui path Car. Sebelumnya, semua method dari `ProductController` juga tersedia di `CarController`, yang bisa menyebabkan perilaku tidak terduga.
+
+- **Interface yang bersih dan jelas:** Dengan ISP, menghapus `deleteProductById()` yang melempar `UnsupportedOperationException` membuat interface `ProductService` lebih jujur — setiap method yang dideklarasikan benar-benar memiliki implementasi yang fungsional. Developer baru yang membaca interface langsung tahu method apa saja yang tersedia dan berfungsi.
+
+### 3) Explain the disadvantages of not applying SOLID principles to your project with examples.
+
+Jika SOLID tidak diterapkan, proyek akan menghadapi beberapa masalah:
+
+- **Tanpa SRP:** Jika `ProductController` dan `CarController` tetap dalam satu file, setiap perubahan pada salah satu controller berpotensi menimbulkan merge conflict saat beberapa developer bekerja bersamaan. File yang panjang juga lebih sulit di-review dan dipahami. Misalnya, file `ProductController.java` awalnya berisi 109 baris untuk dua class — jika kedua entity berkembang, file ini bisa menjadi ratusan baris yang sulit di-navigate.
+
+- **Tanpa OCP:** Jika setiap penambahan fitur baru mengharuskan modifikasi class yang sudah ada, risiko memperkenalkan bug pada fitur yang sudah berjalan meningkat. Contohnya, jika logika `create` di `ProductServiceImpl` diubah untuk menambahkan validasi, perubahan tersebut bisa saja merusak flow yang sudah teruji dan bekerja di production.
+
+- **Tanpa LSP:** Dengan `CarController extends ProductController`, semua endpoint Product (seperti `/product/create`, `/product/list`) secara implisit juga menjadi bagian dari `CarController`. Ini bisa menyebabkan bug di mana request ke `/car/create` justru memanggil method `createProductPost` dari parent class, menghasilkan perilaku yang salah dan membingungkan.
+
+- **Tanpa ISP:** Method `deleteProductById()` yang melempar `UnsupportedOperationException` adalah "jebakan" bagi developer. Jika seseorang memanggil method ini karena melihatnya ada di interface, mereka akan mendapat runtime error yang seharusnya bisa dicegah pada compile time. Ini melanggar prinsip "fail fast" dan membuat debugging lebih sulit.
+
+- **Tanpa DIP:** Jika `CarController` tetap bergantung pada `CarServiceImpl` (bukan `CarService` interface), maka: (1) unit testing menjadi sulit karena kita tidak bisa dengan mudah mengganti implementasi dengan mock, (2) jika di kemudian hari implementasi `CarService` diganti (misalnya dari in-memory ke database), semua class yang bergantung pada `CarServiceImpl` harus diubah. Dengan bergantung pada interface, pergantian implementasi cukup dilakukan di satu tempat (konfigurasi Spring) tanpa mengubah controller.
