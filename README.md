@@ -9,6 +9,26 @@ Dari sisi keamanan, productId tidak lagi diinput oleh pengguna, tetapi di-genera
 
 Selain itu, saya menggunakan feature branch pada Git untuk mengembangkan setiap fitur secara terpisah agar perubahan lebih terkontrol dan meminimalkan konflik.
 
+## Refleksi 3 (Exercise - TDD)
+
+### 1. Reflection on TDD Flow (Percival, 2017)
+
+Following Percival's self-reflective questions, I found this TDD flow to be quite useful overall. Writing tests first forced me to think clearly about the expected behaviour of each method before implementing it — especially for edge cases like empty product lists, invalid status strings, and non-existent order IDs. This upfront design thinking prevented several mistakes I would otherwise only discover later.
+
+That said, writing the skeleton classes just to make the code compile without any logic felt slightly unnatural at first. In future tests, I would ensure the RED phase is kept minimal and intentional — only enough to compile — so the skeleton doesn't accidentally make tests pass before the logic is ready. I would also aim to write smaller, more incremental tests rather than writing all tests at once before implementing anything, as that intermediate feedback loop makes each RED-to-GREEN step more satisfying and easier to debug.
+
+### 2. Reflection on F.I.R.S.T. Principle
+
+Looking at the unit tests created in this exercise:
+
+- **Fast:** The tests run quickly (under 100ms each) since they rely on in-memory lists and Mockito mocks rather than real databases or network calls. This principle is satisfied.
+- **Isolated/Independent:** Each test has its own `@BeforeEach` setup and does not depend on the result of any other test. This principle is satisfied.
+- **Repeatable:** The tests are deterministic — using fixed UUIDs and timestamps — so they produce the same result on each run in any environment. This principle is satisfied.
+- **Self-Validating:** All tests use JUnit assertions (`assertEquals`, `assertNull`, `assertThrows`, etc.) that clearly pass or fail without manual inspection. This principle is satisfied.
+- **Timely:** The tests were written before the implementation (TDD), which is the ideal. This principle is satisfied.
+
+Overall, the tests follow F.I.R.S.T. well. One improvement for next time would be to ensure negative/edge-case tests (like `findAllByAuthor` with a lowercase author) are written with the same rigour as happy path tests, rather than adding them as an afterthought.
+
 Secara keseluruhan, penerapan Clean Code dan secure coding membuat aplikasi lebih terstruktur, aman, dan scalable untuk pengembangan selanjutnya.
 
 ## Refleksi 2
